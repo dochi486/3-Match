@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +12,7 @@ public class GameManager : MonoBehaviour
     readonly string touchEffectString = "TouchEffect";
     GameObject touchEffectGo;
     List<List<GameObject>> foodList;
-    List<Food> destroyAnimals = new List<Food>();
+    List<Food> destroyFoods = new List<Food>();
     int row = 8;
     int column = 6;
     float foodScaleX;
@@ -24,6 +25,9 @@ public class GameManager : MonoBehaviour
     GameObject touchedEffect;
 
     bool firstTouch;
+
+    bool m_isSwiping = false;
+    public bool IsSwiping => m_isSwiping;
 
     private void Awake()
     {
@@ -60,7 +64,7 @@ public class GameManager : MonoBehaviour
 
             for (int y = 0; y < row; y++)
             {
-                foodList[x].Add(CreateAnimal(x, x , y ));
+                foodList[x].Add(CreateAnimal(x, x * xGap, y));
             }
         }
     }
@@ -103,9 +107,95 @@ public class GameManager : MonoBehaviour
         {
             if (pressedFood)
             {
-                touchedEffect = Instantiate(touchEffectGo, pressedFood.position, Quaternion.identity);
+                if (firstTouch)
+                { 
+                    touchedEffect = Instantiate(touchEffectGo, pressedFood.position, Quaternion.identity);
+                    firstTouch = false;
+                }
             }
         }
+        else if(pressedFood != null && releasedFood != null && m_isSwiping == false &&
+            pressedFood != releasedFood 
+            && Vector3.Distance(pressedFood.position, releasedFood.position) <= Mathf.Max(xGap, yGap))
+        {
+            firstTouch = true;
+            m_isSwiping = true;
+            SwipeFood(pressedFood, releasedFood);
+            MoveFood(pressedFood, releasedFood);
+            MoveFood(releasedFood, pressedFood);
+        }
+        else
+        {
+            ClearTouchInfo();
+        }    
+    }
+
+    void AddToDestroy(params Food[] foods)
+    {
+        foreach (var item in foods)
+        {
+            if (destroyFoods.Contains(item) == false)
+                destroyFoods.Add(item);
+        }
+    }
+
+    bool IsMatchedVertical()
+    {
+        Food first, second, third;
+
+        for (int x = 0; x < column ; x++)
+        {
+            for (int y = 0; y < row -2; y++)
+            {
+                first = GetFoodInfo(x, y);
+                second = GetFoodInfo(x, y + 1);
+                third = GetFoodInfo(x, y + 2);
+
+                if(first.name == second.name && second.name == third.name)
+                {
+                    AddToDestroy(first, second, third);
+                }
+            }
+        }
+
+        return false;
+    }
+
+    bool IsMatchedHorizontal()
+    {
+        Food first, second, third;
+
+        for (int x = 0; x < column; x++)
+        {
+            for (int y = 0; y < row -2; y++)
+            {
+                first = GetFoodInfo(x, y);
+                second = GetFoodInfo(x + 1, y);
+                third = GetFoodInfo(x + 2, y);
+
+                if (first.name == second.name && second.name == third.name)
+                {
+                    AddToDestroy(first, second, third);
+                }
+            }
+        }
+
+        return false;
+    }
+
+    void MoveFood(Transform transform, Transform target)
+    {
+        transform.DOMove(target.position, 0.3f).SetLoops(2, LoopType.Yoyo).SetEase(Ease.OutBounce)
+                  .SetLink(transform.gameObject)
+                  .OnComplete(() => m_isSwiping = false);
+    }
+
+    void ClearTouchInfo()
+    {
+        firstTouch = true;
+        pressedFood = null;
+        releasedFood = null;
+        Destroy(touchedEffect);
     }
 
 }
