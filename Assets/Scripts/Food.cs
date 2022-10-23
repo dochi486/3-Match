@@ -21,35 +21,81 @@ public class Food : MonoBehaviour
     bool isMoving;
     public bool IsMoving => isMoving;
     Animator animator;
-
+    bool isAlive = true;
 
     // Start is called before the first frame update
     void Start()
     {
+        isMoving = true;
         rigid = GetComponent<Rigidbody>();
         rigid.AddForce(0, -100f, 0, ForceMode.Force);
         Foodtype = (FoodType)Random.Range(0, System.Enum.GetNames(typeof(FoodType)).Length);
         transform.name = Foodtype.ToString();
         animator = GetComponent<Animator>();
         animator.Play(Foodtype.ToString());
+
+        StartCheckState();
     }
 
-    // Update is called once per frame
-    void Update()
+    void StartCheckState()
     {
-        
+        StartCoroutine(CheckStateCo());
+
+        IEnumerator CheckStateCo()
+        {
+            while(isAlive)
+            {
+                CheckMoving();
+                CheckSwiping();
+                CheckUpForce();
+                yield return null;
+            }
+        }
+    }
+
+    void CheckMoving()
+    {
+        isMoving = rigid.velocity.sqrMagnitude > 0.1f;
+    }
+
+    void CheckSwiping()
+    {
+        rigid.useGravity = !GameManager.instance.IsSwiping;
+    }
+
+    void CheckUpForce()
+    {
+        if(rigid.velocity.y > 0)
+        {
+            rigid.Sleep();
+        }
+    }
+
+    public void DestroyFood()
+    {
+        StartCoroutine(Co());
+
+        IEnumerator Co()
+        {
+            animator.Play("Destroy");
+
+            yield return new WaitForSeconds(0.4f);
+
+            GameManager.instance.OnCompleteDestroy(gameObject, Index);
+            Destroy(gameObject);
+        }
     }
 
     private void OnMouseDown()
     {
-        GameManager.instance.pressedFood = transform;
+        GameManager.instance.OnMouseDown(transform);
     }
 
     private void OnMouseOver()
     {
         if (Input.GetMouseButtonUp(0))
         {
-            GameManager.instance.releasedFood = transform;
+            GameManager.instance.OnMouseOver(transform);
         }
     }
 }

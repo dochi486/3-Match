@@ -371,51 +371,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1060782915
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1060782917}
-  - component: {fileID: 1060782916}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1060782916
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1060782915}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ad31e91ee0b43a4b8880701f166dd7b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pressedFood: {fileID: 0}
-  releasedFood: {fileID: 0}
---- !u!4 &1060782917
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1060782915}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.1593955, y: 0.63842285, z: -3.5908682}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1598126224
 GameObject:
   m_ObjectHideFlags: 0
@@ -536,11 +491,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1792385372}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.04, y: -5.1, z: -1.2375544}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1818228697
 GameObject:
@@ -551,6 +506,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1818228698}
+  - component: {fileID: 1818228699}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -570,8 +526,30 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1818228699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1818228697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ad31e91ee0b43a4b8880701f166dd7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controlSystem:
+    moveSystem:
+      tweenMoveTime: 0.3
+    generateSystsem:
+      foodParent: {fileID: 1792385373}
+      foodPrefab: {fileID: 6702911341703235024, guid: 04ff2a7520d10924fae0a3b579ca23d3, type: 3}
+  userInputSystem:
+    touchEffectPrefab: {fileID: 4107030629909748619, guid: 624824f684b56504095883bea575817c, type: 3}
+  pressedFood: {fileID: 0}
+  releasedFood: {fileID: 0}
 --- !u!1001 &3445934144969020723
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -589,7 +567,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7152992500498101929, guid: 04ff2a7520d10924fae0a3b579ca23d3, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7152992500498101929, guid: 04ff2a7520d10924fae0a3b579ca23d3, type: 3}
       propertyPath: m_LocalPosition.x
